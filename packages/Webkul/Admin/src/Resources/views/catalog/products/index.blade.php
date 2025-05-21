@@ -11,6 +11,8 @@
         <div class="flex items-center gap-x-2.5">
             <!-- Export Modal -->
             <x-admin::datagrid.export :src="route('admin.catalog.products.index')" />
+   
+
 
             {!! view_render_event('bagisto.admin.catalog.products.create.before') !!}
 
@@ -24,8 +26,16 @@
                     </button>
                 </v-create-product-form>
             @endif
+           
 
             {!! view_render_event('bagisto.admin.catalog.products.create.after') !!}
+            
+            <a href="{{ route('admin.catalog.products.import') }}" class="btn btn-lg btn-info">
+    Import CSV
+</a>
+
+    
+            
         </div>
     </div>
 
