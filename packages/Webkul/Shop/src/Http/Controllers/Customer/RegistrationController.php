@@ -100,6 +100,7 @@ class RegistrationController extends Controller
             'subscribed_to_news_letter' => (bool) request()->input('is_subscribed'),
         ]);
 
+        //test commit
         Event::dispatch('customer.registration.before');
 
         $customer = $this->customerRepository->create($data);
