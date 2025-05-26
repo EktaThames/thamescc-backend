@@ -69,6 +69,9 @@ return [
             'verification-sent'           => 'Verification email sent',
             'verified'                    => 'Your account has been verified, try to login now.',
             'verify-failed'               => 'We cannot verify your mail account.',
+            'business-trading-name'       => 'Business Trading Name',
+    'vat-number'                  => 'VAT Number',
+    'company-registration-number' => 'Company Registration Number',
         ],
 
         'account' => [

@@ -169,8 +169,340 @@
 
                         <x-shop::form.control-group.error control-name="password_confirmation" />
                     </x-shop::form.control-group>
+                    
 
                     {!! view_render_event('bagisto.shop.customers.signup_form.password_confirmation.after') !!}
+                    <!-- Trade Customer Fields -->
+
+                    {{-- Business Trading Name --}}
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Business Trading Name</x-shop::form.control-group.label>
+
+    <x-shop::form.control-group.control
+        type="text"
+        name="business_trading_name"
+        class="px-6 py-4"
+        rules="required"
+        :value="old('business_trading_name', $customer->business_trading_name ?? '')"
+    />
+
+    <x-shop::form.control-group.error control-name="business_trading_name" />
+</x-shop::form.control-group>
+
+{{-- Type of Business --}}
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Type of Business</x-shop::form.control-group.label>
+
+    <select name="type_of_business" class="form-control px-6 py-4" required>
+        <option value="">-- Select --</option>
+        <option value="Off license" {{ old('type_of_business', $customer->type_of_business ?? '') == 'Off license' ? 'selected' : '' }}>Off license</option>
+        <option value="Supermarket" {{ old('type_of_business', $customer->type_of_business ?? '') == 'Supermarket' ? 'selected' : '' }}>Supermarket</option>
+        <option value="Restaurant or Pub" {{ old('type_of_business', $customer->type_of_business ?? '') == 'Restaurant or Pub' ? 'selected' : '' }}>Restaurant or Pub</option>
+        <option value="Grocers" {{ old('type_of_business', $customer->type_of_business ?? '') == 'Grocers' ? 'selected' : '' }}>Grocers</option>
+        <option value="Other" {{ old('type_of_business', $customer->type_of_business ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+    </select>
+</x-shop::form.control-group>
+
+{{-- Entity Type --}}
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Entity Type</x-shop::form.control-group.label>
+
+    <select name="entity" class="form-control px-6 py-4" required>
+        <option value="">-- Select --</option>
+        <option value="Limited Company" {{ old('entity', $customer->entity ?? '') == 'Limited Company' ? 'selected' : '' }}>Limited Company</option>
+        <option value="Sole Proprietorship" {{ old('entity', $customer->entity ?? '') == 'Sole Proprietorship' ? 'selected' : '' }}>Sole Proprietorship</option>
+        <option value="Partnership" {{ old('entity', $customer->entity ?? '') == 'Partnership' ? 'selected' : '' }}>Partnership</option>
+    </select>
+</x-shop::form.control-group>
+
+{{-- Trading Address --}}
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Street Address</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="trading_street"
+        rules="required"
+        :value="old('trading_street', $customer->trading_street ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Address Line 2</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="trading_address_line_2"
+        :value="old('trading_address_line_2', $customer->trading_address_line_2 ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">City</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="trading_city"
+        rules="required"
+        :value="old('trading_city', $customer->trading_city ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Postal Code</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="trading_postal_code"
+        rules="required"
+        :value="old('trading_postal_code', $customer->trading_postal_code ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Country</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="trading_country"
+        rules="required"
+        :value="old('trading_country', $customer->trading_country ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Phone</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="trading_phone"
+        rules="required"
+        :value="old('trading_phone', $customer->trading_phone ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Email</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="email"
+        name="trading_email"
+        rules="required|email"
+        :value="old('trading_email', $customer->trading_email ?? '')"
+    />
+</x-shop::form.control-group>
+
+{{-- Owner Name --}}
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Owner First Name</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="owner_first_name"
+        :value="old('owner_first_name', $customer->owner_first_name ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Owner Last Name</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="owner_last_name"
+        :value="old('owner_last_name', $customer->owner_last_name ?? '')"
+    />
+</x-shop::form.control-group>
+
+{{-- Owner Address (if different) --}}
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Owner Street Address</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="owner_street"
+        :value="old('owner_street', $customer->owner_street ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Owner Address Line 2</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="owner_address_line_2"
+        :value="old('owner_address_line_2', $customer->owner_address_line_2 ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Owner City</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="owner_city"
+        :value="old('owner_city', $customer->owner_city ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Owner Postal Code</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="owner_postal_code"
+        :value="old('owner_postal_code', $customer->owner_postal_code ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Owner Country</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="owner_country"
+        :value="old('owner_country', $customer->owner_country ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Owner Phone</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="owner_phone"
+        rules="required"
+        :value="old('owner_phone', $customer->owner_phone ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Owner Email</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="email"
+        name="owner_email"
+        rules="required|email"
+        :value="old('owner_email', $customer->owner_email ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">VAT Registration Number</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="vat_number"
+        rules="required"
+        :value="old('vat_number', $customer->vat_number ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <label>
+        <input type="checkbox" name="not_vat_registered" value="1" {{ old('not_vat_registered', $customer->not_vat_registered ?? false) ? 'checked' : '' }} />
+        I'm not VAT registered
+    </label>
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>EOID</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="eoid"
+        :value="old('eoid', $customer->eoid ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>FID</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="fid"
+        :value="old('fid', $customer->fid ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Company Registration Number</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="company_registration_number"
+        :value="old('company_registration_number', $customer->company_registration_number ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Company Registered Street Address</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="registered_street"
+        :value="old('registered_street', $customer->registered_street ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Apartment</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="registered_apartment"
+        :value="old('registered_apartment', $customer->registered_apartment ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>City</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="registered_city"
+        :value="old('registered_city', $customer->registered_city ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Postal Code</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="registered_postal"
+        :value="old('registered_postal', $customer->registered_postal ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label>Country</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="registered_country"
+        :value="old('registered_country', $customer->registered_country ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <x-shop::form.control-group.label class="required">Referred By</x-shop::form.control-group.label>
+    <x-shop::form.control-group.control
+        type="text"
+        name="referred_by"
+        rules="required"
+        :value="old('referred_by', $customer->referred_by ?? '')"
+    />
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <label>
+        <input type="hidden" name="id_address_proof" value="0" />
+        <input type="checkbox" name="id_address_proof" value="1" required {{ old('id_address_proof', $customer->id_address_proof ?? false) ? 'checked' : '' }} />
+        ID & Address proof (required)
+    </label>
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <label>
+        <input type="hidden" name="accept_terms" value="0" />
+        <input type="checkbox" name="accept_terms" value="1" required {{ old('accept_terms', $customer->accept_terms ?? false) ? 'checked' : '' }} />
+        By submitting, I have read and accepted the terms & conditions and privacy policy and confirm that I am the authorized signatory.
+    </label>
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <label>
+        <input type="hidden" name="accept_processing" value="0" />
+        <input type="checkbox" name="accept_processing" value="1" required {{ old('accept_processing', $customer->accept_processing ?? false) ? 'checked' : '' }} />
+        I agree for my personal info to be used to process purchases with Thames C&C Ltd.
+    </label>
+</x-shop::form.control-group>
+
+<x-shop::form.control-group>
+    <label>
+        <input type="hidden" name="accept_marketing" value="0" />
+        <input type="checkbox" name="accept_marketing" value="1" {{ old('accept_marketing', $customer->accept_marketing ?? false) ? 'checked' : '' }} />
+        I accept to receive marketing info and can opt out later.
+    </label>
+</x-shop::form.control-group>
+
+
+
 
                     @if (core()->getConfigData('customer.captcha.credentials.status'))
                         <div class="mb-5 flex">

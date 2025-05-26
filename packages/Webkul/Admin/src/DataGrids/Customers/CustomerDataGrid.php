@@ -49,6 +49,12 @@ class CustomerDataGrid extends DataGrid
                 'customers.is_suspended',
                 'customer_groups.name as group',
                 'customers.channel_id',
+                'customers.business_trading_name',
+    'customers.type_of_business',
+    'customers.entity',
+    'customers.trading_street',
+    'customers.vat_number',
+    'customers.referred_by'
             )
             ->addSelect(DB::raw('COUNT(DISTINCT '.$tablePrefix.'addresses.id) as address_count'))
             ->addSelect(DB::raw('COUNT(DISTINCT '.$tablePrefix.'orders.id) as order_count'))
@@ -185,6 +191,23 @@ class CustomerDataGrid extends DataGrid
             'type'        => 'integer',
             'sortable'    => true,
         ]);
+        $this->addColumn([
+            'index'      => 'business_trading_name',
+            'label'      => 'Business Name',
+            'type'       => 'string',
+            'searchable' => true,
+            'filterable' => true,
+            'sortable'   => true,
+        ]);
+        
+        $this->addColumn([
+            'index'      => 'vat_number',
+            'label'      => 'VAT Number',
+            'type'       => 'string',
+            'searchable' => true,
+            'filterable' => true,
+        ]);
+        
     }
 
     /**

@@ -17,6 +17,10 @@ class RegistrationRequest extends FormRequest
         'last_name'  => 'string|required',
         'email'      => 'email|required|unique:customers,email',
         'password'   => 'confirmed|min:6|required',
+        'company_registration_number' => 'nullable|string|max:255',
+'business_trading_name'      => 'nullable|string|max:255',
+'vat_number'                 => 'nullable|string|max:255',
+
     ];
 
     /**
