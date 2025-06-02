@@ -276,7 +276,7 @@
 </x-shop::form.control-group>
 
 <x-shop::form.control-group>
-    <x-shop::form.control-group.label class="required">Email</x-shop::form.control-group.label>
+    <x-shop::form.control-group.label class="required">Trading Email</x-shop::form.control-group.label>
     <x-shop::form.control-group.control
         type="email"
         name="trading_email"

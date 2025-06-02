@@ -60,11 +60,22 @@ class ImportProductsDaily extends Command
 
         if (!$this->importHelper->validate()) {
             $this->error("Validation failed.");
+        
+            $errors = $this->importHelper->getFormattedErrors();
+        
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->line("- " . json_encode($error));
+                }
+            } else {
+                $this->line("No detailed error info available.");
+            }
+        
             return Command::FAILURE;
         }
+        
 
         $this->info("Import validated successfully.");
-
 
 
         if ($import->state === \Webkul\DataTransfer\Helpers\Import::STATE_PENDING) {
