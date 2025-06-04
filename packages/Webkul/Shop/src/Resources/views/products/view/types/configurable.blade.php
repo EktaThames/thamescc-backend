@@ -5,12 +5,20 @@
 
     {!! view_render_event('bagisto.shop.products.view.configurable-options.after', ['product' => $product]) !!}
 
+    @php
+        $config = app('Webkul\Product\Helpers\ConfigurableOption')->getConfigurationConfig($product);
+    @endphp
     @push('scripts')
         <script
             type="text/x-template"
             id="v-product-configurable-options-template"
         >
-            <div class="w-[455px] max-w-full max-sm:w-full">
+        <div v-if="selectedVariantName" class="mt-6 text-base font-semibold text-gray-800">
+            <span class="text-gray-600">Selected Variant:</span>
+            <span class="ml-3 text-black">@{{ selectedVariantName }}</span>
+        </div>
+        
+            <div class="w-full">
                 <input
                     type="hidden"
                     name="selected_configurable_option"
@@ -18,173 +26,64 @@
                     :value="selectedOptionVariant"
                     ref="selected_configurable_option"
                 >
-
                 <div
                     class="mt-5"
                     v-for='(attribute, index) in childAttributes'
                 >
-                    <!-- Dropdown Options Container -->
-                    <template v-if="! attribute.swatch_type || attribute.swatch_type == '' || attribute.swatch_type == 'dropdown'">
-                        <!-- Dropdown Label -->
-                        <h2 class="mb-4 text-xl max-sm:mb-1.5 max-sm:text-base max-sm:font-medium">
-                            @{{ attribute.label }}
-                        </h2>
-                        
-                        <!-- Dropdown Options -->
-                        <v-field
-                            as="select"
-                            :name="'super_attribute[' + attribute.id + ']'"
-                            class="custom-select mb-3 block w-full cursor-pointer rounded-lg border border-zinc-200 bg-white px-5 py-3 text-base text-zinc-500 focus:border-blue-500 focus:ring-blue-500"
-                            :class="[errors['super_attribute[' + attribute.id + ']'] ? 'border border-red-500' : '']"
-                            :id="'attribute_' + attribute.id"
-                            v-model="attribute.selectedValue"
-                            rules="required"
-                            :label="attribute.label"
-                            :aria-label="attribute.label"
-                            :disabled="attribute.disabled"
-                            @change="configure(attribute, $event.target.value)"
-                        >
-                            <option
-                                v-for='(option, index) in attribute.options'
-                                :value="option.id"
+                    <table class="w-full text-sm text-left border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+                        <thead class="bg-gray-50 text-gray-700 font-medium">
+                            <tr>
+                                <th class="px-4 py-3">Pack Size</th>
+                                <th class="px-4 py-3">Unit Price</th>
+                                <th class="px-4 py-3">Total Price</th>
+                                <th class="px-4 py-3">Quantity</th>
+                                <th class="px-4 py-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="(option, index) in attribute.options"
+                                :key="index"
+                                class="bg-white border-t hover:bg-gray-50 transition"
                             >
-                                @{{ option.label }}
-                            </option>
-                        </v-field>
-                    </template>
-
-                    <!-- Swatch Options Container -->
-                    <template v-else>
-                        <!-- Option Label -->
-                        <h2 class="mb-4 text-xl max-sm:mb-2 max-sm:text-base">
-                            @{{ attribute.label }}
-                        </h2>
-
-                        <!-- Swatch Options -->
-                        <div class="flex items-center gap-3">
-                            <template v-for="(option, index) in attribute.options">
-                                <template v-if="option.id">
-                                    <!-- Color Swatch Options -->
-                                    <label
-                                        class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none"
-                                        :class="{'ring-2 ring-gray-900' : option.id == attribute.selectedValue}"
-                                        :title="option.label"
-                                        v-if="attribute.swatch_type == 'color'"
+                                <td class="px-4 py-3 text-gray-800">
+                                    <span v-if="option.allowedProducts?.length === 1">
+                                        @{{ config.variant_names[option.allowedProducts[0]] }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-600">
+                                    <span v-if="option.allowedProducts?.length === 1">
+                                        @{{ config.variant_prices[option.allowedProducts[0]]?.formatted_unit_price || '—' }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-600">
+                                    <span v-if="option.allowedProducts?.length === 1">
+                                        @{{ config.variant_prices[option.allowedProducts[0]]?.final.formatted_price || '—' }}
+                                    </span>
+                                    <span v-else>—</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input
+                                        type="number"
+                                        v-if="option.allowedProducts && option.allowedProducts.length === 1"
+                                        :id="'quantity' + option.allowedProducts[0]"
+                                        min="1"
+                                        value="1"
+                                        class="w-20 px-2 py-1 border rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    />
+                                </td>
+                                <td class="px-4 py-2">
+                                    <button
+                                        type="button"
+                                        class="secondary-button max-w-[120px] py-1.5 max-md:py-1 max-sm:rounded-sm max-sm:py-0.5 text-xs"
+                                        @click="addToCart({ productId: {{$product->id}}, optionId: option.id ,attribute:attribute })"
                                     >
-                                        <v-field
-                                            type="radio"
-                                            :name="'super_attribute[' + attribute.id + ']'"
-                                            :value="option.id"
-                                            v-slot="{ field }"
-                                            rules="required"
-                                            :label="attribute.label"
-                                            :aria-label="attribute.label"
-                                        >
-                                            <input
-                                                type="radio"
-                                                :name="'super_attribute[' + attribute.id + ']'"
-                                                :value="option.id"
-                                                v-bind="field"
-                                                :id="'attribute_' + attribute.id"
-                                                :aria-labelledby="'color-choice-' + index + '-label'"
-                                                class="peer sr-only"
-                                                @click="configure(attribute, $event.target.value)"
-                                            />
-                                        </v-field>
-
-                                        <span
-                                            class="h-8 w-8 rounded-full border border-gray-200 max-sm:h-[25px] max-sm:w-[25px]"
-                                            tabindex="0"
-                                            :style="{ 'background-color': option.swatch_value }"
-                                        ></span>
-                                    </label>
-
-                                    <!-- Image Swatch Options -->
-                                    <label 
-                                        class="group relative flex h-[60px] w-[60px] cursor-pointer items-center justify-center overflow-hidden rounded-md border bg-white font-medium uppercase text-gray-900 hover:bg-gray-50 sm:py-6"
-                                        :class="{'border-navyBlue' : option.id == attribute.selectedValue }"
-                                        :title="option.label"
-                                        v-if="attribute.swatch_type == 'image'"
-                                    >
-                                        <v-field
-                                            type="radio"
-                                            :name="'super_attribute[' + attribute.id + ']'"
-                                            v-model="attribute.selectedValue"
-                                            :value="option.id"
-                                            v-slot="{ field }"
-                                            rules="required"
-                                            :label="attribute.label"
-                                            :aria-label="attribute.label"
-                                        >
-                                            <input
-                                                type="radio"
-                                                :name="'super_attribute[' + attribute.id + ']'"
-                                                :value="option.id"
-                                                v-bind="field"
-                                                :id="'attribute_' + attribute.id"
-                                                :aria-labelledby="'color-choice-' + index + '-label'"
-                                                class="peer sr-only"
-                                                @click="configure(attribute, $event.target.value)"
-                                            />
-                                        </v-field>
-
-                                        <img
-                                            :src="option.swatch_value"
-                                            :title="option.label"
-                                        />
-                                    </label>
-
-                                    <!-- Text Swatch Options -->
-                                    <label 
-                                        class="group relative flex h-fit min-w-fit cursor-pointer items-center justify-center rounded-full border border-gray-300 bg-white px-5 py-3 font-medium uppercase text-gray-900 hover:bg-gray-50 max-sm:h-fit max-sm:w-fit max-sm:px-3.5 max-sm:py-2"
-                                        :class="{'border-transparent !bg-navyBlue text-white' : option.id == attribute.selectedValue }"
-                                        :title="option.label"
-                                        v-if="attribute.swatch_type == 'text'"
-                                    >
-                                        <v-field
-                                            type="radio"
-                                            :name="'super_attribute[' + attribute.id + ']'"
-                                            :value="option.id"
-                                            v-model="attribute.selectedValue"
-                                            v-slot="{ field }"
-                                            rules="required"
-                                            :label="attribute.label"
-                                            :aria-label="attribute.label"
-                                        >
-                                            <input
-                                                type="radio"
-                                                :name="'super_attribute[' + attribute.id + ']'"
-                                                :value="option.id"
-                                                v-bind="field"
-                                                :id="'attribute_' + attribute.id"
-                                                class="peer sr-only"
-                                                :aria-labelledby="'color-choice-' + index + '-label'"
-                                                @click="configure(attribute, $event.target.value)"
-                                            />
-                                        </v-field>
-
-                                        <span class="text-lg max-sm:text-sm">
-                                            @{{ option.label }}
-                                        </span>
-
-                                        <span
-                                            class="pointer-events-none absolute -inset-px rounded-full"
-                                            role="presentation"
-                                        >
-                                        </span>
-                                    </label>
-                                </template>
-                            </template>
-
-                            <span
-                                class="text-sm text-gray-600 max-sm:text-xs"
-                                v-if="! attribute.options.length"
-                            >
-                                @lang('shop::app.products.view.type.configurable.select-above-options')
-                            </span>
-                        </div>
-                    </template>
-
+                                        Add to Cart
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <v-error-message
                         :name="'super_attribute[' + attribute.id + ']'"
                         v-slot="{ message }"
@@ -215,13 +114,17 @@
 
                         selectedOptionVariant: '',
 
+                        selectedVariantName: '',
+
                         galleryImages: [],
                     }
                 },
 
                 mounted() {
                     let attributes = JSON.parse(JSON.stringify(this.config)).attributes.slice();
-
+                     console.log(attributes);
+                    console.log(attributes[0].options);
+                    
                     let index = attributes.length;
 
                     while (index--) {
@@ -247,11 +150,12 @@
 
                 methods: {
                     configure(attribute, optionId) {
+                
                         this.possibleOptionVariant = this.getPossibleOptionVariant(attribute, optionId);
 
                         if (optionId) {
                             attribute.selectedValue = optionId;
-                            
+
                             if (attribute.nextAttribute) {
                                 attribute.nextAttribute.disabled = false;
 
@@ -262,20 +166,56 @@
                                 this.resetChildAttributes(attribute.nextAttribute);
                             } else {
                                 this.selectedOptionVariant = this.possibleOptionVariant;
+                                this.selectedVariantName = this.config.variant_names[this.possibleOptionVariant] || ''; // ✅ added
+
                             }
                         } else {
                             this.clearAttributeSelection(attribute);
-
                             this.clearAttributeSelection(attribute.nextAttribute);
-
                             this.resetChildAttributes(attribute);
+                            this.selectedVariantName = '';
                         }
 
                         this.reloadPrice();
-                        
                         this.reloadImages();
                     },
+                    addToCart(params) {
+                        this.possibleOptionVariant = this.getPossibleOptionVariant(params.attribute, params.optionId);
+                        let quantity = document.querySelector('#quantity'+this.possibleOptionVariant).value;
 
+                        const operation = this.is_buy_now ? 'buyNow' : 'addToCart';
+
+                        let formData = new FormData();
+                        formData.append('product_id', params.productId);
+                        formData.append('quantity', quantity || 1);
+                        formData.append('selected_configurable_option', this.possibleOptionVariant);
+                        formData.append('is_buy_now', this.is_buy_now ? 1 : 0);
+
+                        this.$axios.post('{{ route("shop.api.checkout.cart.store") }}', formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            })
+                            .then(response => {
+                                if (response.data.message) {
+                                    this.$emitter.emit('update-mini-cart', response.data.data);
+
+                                    this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
+
+                                    if (response.data.redirect) {
+                                        window.location.href= response.data.redirect;
+                                    }
+                                } else {
+                                    this.$emitter.emit('add-flash', { type: 'warning', message: response.data.data.message });
+                                }
+
+                                this.isStoring[operation] = false;
+                            })
+                            .catch(error => {
+
+                                this.$emitter.emit('add-flash', { type: 'warning', message: error.response.data.message });
+                            });
+                    },
                     getPossibleOptionVariant(attribute, optionId) {
                         let matchedOptions = attribute.options.filter(option => option.id == optionId);
 
@@ -289,19 +229,13 @@
                     fillAttributeOptions(attribute) {
                         let options = this.config.attributes.find(tempAttribute => tempAttribute.id === attribute.id)?.options;
 
-                        attribute.options = [{
-                            'id': '',
-                            'label': "@lang('shop::app.products.view.type.configurable.select-options')",
-                            'products': []
-                        }];
-
                         if (! options) {
                             return;
                         }
 
                         let prevAttributeSelectedOption = attribute.prevAttribute?.options.find(option => option.id == attribute.prevAttribute.selectedValue);
 
-                        let index = 1;
+                        let index = 0;
 
                         for (let i = 0; i < options.length; i++) {
                             let allowedProducts = [];
@@ -323,90 +257,79 @@
                             }
                         }
                     },
-
                     resetChildAttributes(attribute) {
-                        if (! attribute.childAttributes) {
-                            return;
-                        }
+                        if (! attribute.childAttributes) return;
 
-                        attribute.childAttributes.forEach(function (set) {
+                        attribute.childAttributes.forEach(set => {
                             set.selectedValue = null;
-
                             set.disabled = true;
                         });
                     },
 
-                    clearAttributeSelection (attribute) {
-                        if (! attribute) {
-                            return;
-                        }
+                    clearAttributeSelection(attribute) {
+                        if (! attribute) return;
 
                         attribute.selectedValue = null;
-
                         this.selectedOptionVariant = null;
                     },
 
-                    reloadPrice () {
+                    reloadPrice(attribute) {
                         let selectedOptionCount = this.childAttributes.filter(attribute => attribute.selectedValue).length;
 
                         let finalPrice = document.querySelector('.final-price');
-
                         let regularPrice = document.querySelector('.regular-price');
 
                         let configVariant = this.config.variant_prices[this.possibleOptionVariant];
 
                         if (this.childAttributes.length == selectedOptionCount) {
                             document.querySelector('.price-label').style.display = 'none';
+                            let vname = this.selectedVariantName.split('x')[0]
+                            if(vname != undefined && vname != null && vname != '') {
+                            
 
+                                let numericVname = parseFloat(vname) || 1; // Ensure vname is numeric or default to 1
+                                 var updatedPrice = Math.round(configVariant.regular.price / numericVname);
+                                 var updatedPriceFormated = configVariant.final.formatted_price.replace(/\d+/, updatedPrice);
+  
+                            }
+                            
                             if (parseInt(configVariant.regular.price) > parseInt(configVariant.final.price)) {
                                 regularPrice.style.display = 'block';
-
-                                finalPrice.innerHTML = configVariant.final.formatted_price;
-
-                                regularPrice.innerHTML = configVariant.regular.formatted_price;
+                                finalPrice.innerHTML = updatedPrice ? updatedPriceFormated :configVariant.final.formatted_price;
+                                regularPrice.innerHTML = updatedPriceFormated?updatedPriceFormated: configVariant.regular.formatted_price;
                             } else {
-                                finalPrice.innerHTML = configVariant.regular.formatted_price;
-
+                                 
+                                finalPrice.innerHTML = updatedPriceFormated?updatedPriceFormated:configVariant.regular.formatted_price;
                                 regularPrice.style.display = 'none';
                             }
 
-                            this.$emitter.emit('configurable-variant-selected-event',this.possibleOptionVariant);
+                            this.$emitter.emit('configurable-variant-selected-event', this.possibleOptionVariant);
                         } else {
                             document.querySelector('.price-label').style.display = 'inline-block';
-
                             finalPrice.innerHTML = this.config.regular.formatted_price;
 
                             this.$emitter.emit('configurable-variant-selected-event', 0);
                         }
                     },
 
-                    reloadImages () {
-                        galleryImages.splice(0, galleryImages.length)
+                    reloadImages() {
+                        galleryImages.splice(0, galleryImages.length);
 
                         if (this.possibleOptionVariant) {
-                            this.config.variant_images[this.possibleOptionVariant].forEach(function(image) {
-                                galleryImages.push(image);
-                            });
-
-                            this.config.variant_videos[this.possibleOptionVariant].forEach(function(video) {
-                                galleryImages.push(video);
-                            });
+                            this.config.variant_images[this.possibleOptionVariant].forEach(image => galleryImages.push(image));
+                            this.config.variant_videos[this.possibleOptionVariant].forEach(video => galleryImages.push(video));
                         }
 
-                        this.galleryImages.forEach(function(image) {
-                            galleryImages.push(image);
-                        });
+                        this.galleryImages.forEach(image => galleryImages.push(image));
 
                         if (galleryImages.length) {
-                            this.$parent.$parent.$refs.gallery.media.images =  [...galleryImages];
+                            this.$parent.$parent.$refs.gallery.media.images = [...galleryImages];
                         }
 
                         this.$emitter.emit('configurable-variant-update-images-event', galleryImages);
                     },
                 }
             });
-
         </script>
     @endpush
-
 @endif
