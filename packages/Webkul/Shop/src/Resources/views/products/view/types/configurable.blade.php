@@ -63,15 +63,35 @@
                                     <span v-else>—</span>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <input
-                                        type="number"
+                                    <div
                                         v-if="option.allowedProducts && option.allowedProducts.length === 1"
-                                        :id="'quantity' + option.allowedProducts[0]"
-                                        min="1"
-                                        value="1"
-                                        class="w-20 px-2 py-1 border rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    />
+                                        class="flex items-center space-x-2"
+                                    >
+                                        <button
+                                            type="button"
+                                            class="px-2 py-1 border rounded-md text-sm bg-gray-100 hover:bg-gray-200"
+                                            @click="decreaseQuantity(option.allowedProducts[0])"
+                                        >
+                                            −
+                                        </button>
+                                        <input
+                                            type="number"
+                                            :id="'quantity' + option.allowedProducts[0]"
+                                            :value="quantities[option.allowedProducts[0]] || 1"
+                                            min="1"
+                                            readonly
+                                            class="w-16 text-center px-2 py-1 border rounded-md text-sm text-gray-700 focus:outline-none"
+                                        />
+                                        <button
+                                            type="button"
+                                            class="px-2 py-1 border rounded-md text-sm bg-gray-100 hover:bg-gray-200"
+                                            @click="increaseQuantity(option.allowedProducts[0])"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                 </td>
+
                                 <td class="px-4 py-2">
                                     <button
                                         type="button"
@@ -109,6 +129,8 @@
                         config: @json(app('Webkul\Product\Helpers\ConfigurableOption')->getConfigurationConfig($product)),
 
                         childAttributes: [],
+
+                        quantities: {},
 
                         possibleOptionVariant: null,
 
@@ -149,6 +171,19 @@
                 },
 
                 methods: {
+                     increaseQuantity(productId) {
+                        if (!this.quantities[productId]) {
+                            this.quantities[productId] = 1;
+                        }
+                        this.quantities[productId]++;
+                    },
+                    decreaseQuantity(productId) {
+                        if (!this.quantities[productId] || this.quantities[productId] <= 1) {
+                            this.quantities[productId] = 1;
+                        } else {
+                            this.quantities[productId]--;
+                        }
+                    },
                     configure(attribute, optionId) {
                 
                         this.possibleOptionVariant = this.getPossibleOptionVariant(attribute, optionId);

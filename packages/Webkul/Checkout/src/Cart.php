@@ -253,63 +253,84 @@ class Cart
     /**
      * Add items in a cart with some cart and item details.
      */
-    public function addProduct(ProductContract $product, array $data): Contracts\Cart|\Exception
-    {
-        Event::dispatch('checkout.cart.add.before', $product->id);
+   public function addProduct(ProductContract $product, array $data): Contracts\Cart|\Exception
+{
+    Event::dispatch('checkout.cart.add.before', $product->id);
 
-        if (! $this->cart) {
-            $this->createCart([]);
-        }
-
-        $cartProducts = $product->getTypeInstance()->prepareForCart(array_merge([
-            'cart_id' => $this->cart->id,
-        ], $data));
-
-        if (is_string($cartProducts)) {
-            if (! $this->cart->all_items->count()) {
-                $this->removeCart($this->cart);
-            } else {
-                $this->collectTotals();
-            }
-
-            throw new \Exception($cartProducts);
-        } else {
-            $parentCartItem = null;
-
-            foreach ($cartProducts as $cartProduct) {
-                $cartItem = $this->getItemByProduct($cartProduct, $data);
-
-                if (isset($cartProduct['parent_id'])) {
-                    $cartProduct['parent_id'] = $parentCartItem->id;
-                }
-
-                if (! $cartItem) {
-                    $cartItem = $this->cartItemRepository->create(array_merge($cartProduct, ['cart_id' => $this->cart->id]));
-                } else {
-                    if (
-                        isset($cartProduct['parent_id'])
-                        && $cartItem->parent_id !== $parentCartItem->id
-                    ) {
-                        $cartItem = $this->cartItemRepository->create(array_merge($cartProduct, [
-                            'cart_id' => $this->cart->id,
-                        ]));
-                    } else {
-                        $cartItem = $this->cartItemRepository->update($cartProduct, $cartItem->id);
-                    }
-                }
-
-                if (! $parentCartItem) {
-                    $parentCartItem = $cartItem;
-                }
-            }
-        }
-
-        $this->collectTotals();
-
-        Event::dispatch('checkout.cart.add.after', $this->cart);
-
-        return $this->cart;
+    if (! $this->cart) {
+        $this->createCart([]);
     }
+
+    $customer = auth()->guard('customer')->user();
+    $customerGroupId = $customer?->customer_group_id ?? null;
+
+    $cartProducts = $product->getTypeInstance()->prepareForCart(array_merge([
+        'cart_id' => $this->cart->id,
+    ], $data));
+
+    if (is_string($cartProducts)) {
+        if (! $this->cart->all_items->count()) {
+            $this->removeCart($this->cart);
+        } else {
+            $this->collectTotals();
+        }
+
+        throw new \Exception($cartProducts);
+    } else {
+
+        $parentCartItem = null;
+
+        foreach ($cartProducts as $cartProduct) {
+
+            $cartItem = $this->getItemByProduct($cartProduct, $data);
+
+            if (isset($cartProduct['parent_id'])) {
+                $cartProduct['parent_id'] = $parentCartItem->id;
+            }
+
+            if (! $cartItem) {
+                $cartItem = $this->cartItemRepository->create(array_merge($cartProduct, ['cart_id' => $this->cart->id]));
+            } else {
+                if (
+                    isset($cartProduct['parent_id'])
+                    && $cartItem->parent_id !== $parentCartItem->id
+                ) {
+                    $cartItem = $this->cartItemRepository->create(array_merge($cartProduct, [
+                        'cart_id' => $this->cart->id,
+                    ]));
+                } else {
+                    $cartItem = $this->cartItemRepository->update($cartProduct, $cartItem->id);
+                }
+            }
+
+            if (! $parentCartItem) {
+                $parentCartItem = $cartItem;
+            }
+        }
+    }
+
+    $this->collectTotals();
+
+    if ($customerGroupId == 3) {
+        foreach ($this->cart->items as $item) {
+            $item->tax_percent = 0;
+            $item->tax_amount = 0;
+            $item->base_tax_amount = 0;
+            $item->save();
+        }
+
+        $this->cart->tax_total = 0;
+        $this->cart->base_tax_total = 0;
+        $this->cart->grand_total = $this->cart->sub_total;
+        $this->cart->base_grand_total = $this->cart->base_sub_total;
+        $this->cart->save();
+    }
+
+    Event::dispatch('checkout.cart.add.after', $this->cart);
+
+    return $this->cart;
+}
+
 
     /**
      * Remove the item from the cart.
