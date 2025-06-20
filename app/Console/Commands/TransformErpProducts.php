@@ -226,7 +226,7 @@ class TransformErpProducts extends Command
 
         foreach ($records as $row) {
             $item = trim($row['item'] ?? '');
-            $description = trim($row['description'] ?? '');
+            $description = str_replace('�', '£', trim($row['description'] ?? ''));
             $packDescription = trim($row['pack_description'] ?? '');
             $qty = trim($row['qty_in_stock'] ?? '0');
             $casesInStock = trim($row['cases_in_stock'] ?? '0');
@@ -244,8 +244,13 @@ class TransformErpProducts extends Command
             $VAT = strtoupper(trim($row['VAT'] ?? ''));
 
             $promID = strtoupper(trim($row['promID'] ?? ''));
+            $promSell1 = trim($row['promSell for Sell 1'] ?? '');
+            $promSell2 = trim($row['promSell for Sell 2'] ?? '');
+            $promSell3 = trim($row['promSell for Sell 3'] ?? '');
             $promStart = trim($row['promStart'] ?? '');
             $promEnd = trim($row['promEnd'] ?? '');
+            $promStart = $this->formatDate($promStart);
+            $promEnd = $this->formatDate($promEnd);
             $max_order = trim($row['Max. Order'] ?? '');
             $RRP = trim($row['RRP'] ?? '');
             $POR = trim($row['POR %'] ?? '');
@@ -268,8 +273,12 @@ class TransformErpProducts extends Command
             $variants = [];
 
             if (!$hasVariants) {
-                $urlKey = Str::slug("{$description}-{$item}");
-                $products[] = $this->makeSimpleProduct($item, '', $description, $packDescription, $qty, $casesInStock, $vatId, $sell1, $pack1, 1, $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $urlKey, $categoriesField);
+                    $urlKey = Str::slug("{$description}-{$item}");
+                    $specialPrice = $promID ? $promSell1 : '';
+                    $products[] = $this->makeSimpleProduct(
+                        $item, '', $description, $packDescription, $qty, $casesInStock, $vatId, $sell1, $pack1, 1,
+                        $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $urlKey, $categoriesField, $specialPrice
+                    );
             } else {
                 $parent = $this->makeConfigurableParent($item, $description, $packDescription, $qty, $casesInStock, $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $categoriesField);
                 $products[] = $parent;
@@ -278,20 +287,32 @@ class TransformErpProducts extends Command
 
                 $sku1 = $item . 'a';
                 $urlKey1 = Str::slug("{$description}-{$sku1}");
-                $products[] = $this->makeSimpleProduct($sku1, $item, $description, $packDescription, $qty, $casesInStock, $vatId, $sell1, $pack1, 0, $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $urlKey1, $categoriesField);
+                $specialPrice1 = $promID ? $promSell1 : '';
+                $products[] = $this->makeSimpleProduct(
+                    $sku1, $item, $description, $packDescription, $qty, $casesInStock, $vatId, $sell1, $pack1, 0,
+                    $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $urlKey1, $categoriesField, $specialPrice1
+                );
                 $configurableVariants[] = "sku={$sku1},pack_size=Pack 1";
 
                 if (!empty($pack2)) {
                     $sku2 = $item . 'c';
                     $urlKey2 = Str::slug("{$description}-{$sku2}");
-                    $products[] = $this->makeSimpleProduct($sku2, $item, $description, $packDescription, $qty, $casesInStock, $vatId, $sell2, $pack2, 0, $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $urlKey2, $categoriesField);
+                    $specialPrice2 = $promID ? $promSell2 : '';
+                    $products[] = $this->makeSimpleProduct(
+                        $sku2, $item, $description, $packDescription, $qty, $casesInStock, $vatId, $sell2, $pack2, 0,
+                        $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $urlKey2, $categoriesField, $specialPrice2
+                    );
                     $configurableVariants[] = "sku={$sku2},pack_size=Pack 2";
                 }
 
                 if (!empty($pack3)) {
                     $sku3 = $item . 'b';
                     $urlKey3 = Str::slug("{$description}-{$sku3}");
-                    $products[] = $this->makeSimpleProduct($sku3, $item, $description, $packDescription, $qty, $casesInStock, $vatId, $sell3, $pack3, 0, $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $urlKey3, $categoriesField);
+                    $specialPrice3 = $promID ? $promSell3 : '';
+                    $products[] = $this->makeSimpleProduct(
+                        $sku3, $item, $description, $packDescription, $qty, $casesInStock, $vatId, $sell3, $pack3, 0,
+                        $promID, $promStart, $promEnd, $max_order, $RRP, $POR, $PMP_Plain, $urlKey3, $categoriesField, $specialPrice3
+                    );
                     $configurableVariants[] = "sku={$sku3},pack_size=Pack 3";
                 }
 
@@ -311,7 +332,7 @@ class TransformErpProducts extends Command
         return Command::SUCCESS;
     }
 
-    protected function makeSimpleProduct($sku, $parentSku, $name, $packDesc, $qty, $cases, $vatId, $price, $packName = '', $visible_individually = 1, $promID = '', $promStart = '', $promEnd = '', $max_order = '', $RRP = '', $POR = '', $PMP_Plain = '', $url_key, $categories = '')
+    protected function makeSimpleProduct($sku, $parentSku, $name, $packDesc, $qty, $cases, $vatId, $price, $packName = '', $visible_individually = 1, $promID = '', $promStart = '', $promEnd = '', $max_order = '', $RRP = '', $POR = '', $PMP_Plain = '', $url_key, $categories = '', $special_price = '')
     {
         $packQuantity = $packName;
         $customSubtitle = '';
@@ -345,9 +366,9 @@ class TransformErpProducts extends Command
             'height' => '',
             'weight' => 10,
             'price' => $price,
-            'special_price' => '',
-            'special_price_from' => '',
-            'special_price_to' => '',
+            'special_price' => $special_price,
+            'special_price_from' => $promStart,
+            'special_price_to' => $promEnd,
             'url_key' => $url_key,
             'meta_title' => '',
             'meta_keywords' => '',
@@ -432,5 +453,17 @@ class TransformErpProducts extends Command
             'shipping_class' => 'No Shipping class',
             'configurable_variants' => '',
         ];
+    }
+
+    protected function formatDate($date)
+    {
+        if (empty($date)) {
+            return '';
+        }
+        $timestamp = strtotime($date);
+        if ($timestamp === false) {
+            return '';
+        }
+        return date('Y-m-d', $timestamp);
     }
 }

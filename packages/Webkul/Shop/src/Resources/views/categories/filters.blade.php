@@ -151,10 +151,11 @@
         id="v-filter-item-template"
     >
         <template v-if="filter.type === 'price' || filter.options.length">
+            <div style="height:400px; overflow-y:scroll;">
             <x-shop::accordion class="last:border-b-0">
                 <!-- Filter Item Header -->
-                <x-slot:header class="px-0 py-2.5 max-sm:!pb-1.5">
-                    <div class="flex items-center justify-between">
+                <x-slot:header class="px-0 py-2.5 max-sm:!pb-1.5 ">
+                    <div class="flex items-center justify-between ">
                         <p class="text-lg font-semibold max-sm:text-base max-sm:font-medium">
                             @{{ filter.name }}
                         </p>
@@ -172,6 +173,35 @@
                                 @set-price-range="applyValue($event)"
                             >
                             </v-price-filter>
+                        </li>
+                    </ul>
+
+                    <!-- Category Filter Clickable Options -->
+                    <ul v-else-if="filter.code === 'category_id'" class="pb-3 text-base text-gray-700">
+                        <li
+                            :key="option.id"
+                            v-for="(option, optionIndex) in filter.options"
+                        >
+                            <div
+                                class="flex select-none items-center gap-x-4 rounded hover:bg-gray-100 cursor-pointer max-sm:gap-x-1 max-sm:!p-0 ltr:pl-2 rtl:pr-2"
+                               :id="'option_' + option.id"
+                                @click="applyCat([option.id])"
+                            >
+                                <span
+                                    class="icon-folder text-2xl text-navyBlue max-sm:text-xl"
+                                    :aria-label="option.name"
+                                    :aria-labelledby="'label_option_' + option.id"
+                                    tabindex="0"
+                                ></span>
+                                <label
+                                    class="w-full cursor-pointer p-2 text-base text-gray-900 max-sm:p-1 max-sm:text-sm ltr:pl-0 rtl:pr-0"
+                                    :id="'label_option_' + option.id"
+                                    role="button"
+                                    tabindex="0"
+                                >
+                                    @{{ option.name }}
+                                </label>
+                            </div>
                         </li>
                     </ul>
 
@@ -216,6 +246,7 @@
                     </ul>
                 </x-slot>
             </x-shop::accordion>
+            </div>
         </template>
     </script>
 
@@ -371,6 +402,7 @@
 
             methods: {
                 applyValue($event) {
+                    
                     if (this.filter.code === 'price') {
                         this.appliedValues = $event;
 
@@ -381,6 +413,18 @@
 
                     this.$emit('values-applied', this.appliedValues);
                 },
+                applyCat(catId) {
+                    document.querySelectorAll('[id^="option_"]').forEach((el) => {
+                        el.classList.remove("bg-zinc-300");
+                    });
+
+                    const el = document.getElementById("option_" + catId);
+                    if (el) {
+                        el.classList.add("bg-zinc-300");
+                    }
+                    this.$emit('values-applied', catId);
+                },
+                
             },
         });
 
