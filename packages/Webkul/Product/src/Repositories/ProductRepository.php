@@ -275,6 +275,32 @@ class ProductRepository extends Repository
             }
 
             /**
+             * Filter by Offer Title (PMP, PROMOTION, CLEARANCE).
+             */
+            if (! empty($params['offer_title'])) {
+                $qb->where(function ($offerQuery) use ($params) {
+                    if ($params['offer_title'] === 'pmp') {
+                        $offerQuery->whereHas('attribute_values', function ($q) {
+                            $q->whereHas('attribute', function ($attrQ) {
+                                $attrQ->where('code', 'pmp_or_not');
+                            })->where('text_value', 'PMP');
+                        });
+                    } elseif ($params['offer_title'] === 'promotion') {
+                        $offerQuery->whereHas('attribute_values', function ($q) {
+                            $q->whereHas('attribute', function ($attrQ) {
+                                $attrQ->where('code', 'prom_id');
+                            })->where('text_value', '2025 WEEK 18 PROMOTION');
+                        });
+                    } elseif ($params['offer_title'] === 'clearance') {
+                        $offerQuery->whereHas('attribute_values', function ($q) {
+                            $q->whereHas('attribute', function ($attrQ) {
+                                $attrQ->where('code', 'prom_id');
+                            })->where('text_value', 'CLEARANCE');
+                        });
+                    }
+                });
+            }
+            /**
              * Filter query by price.
              */
             if (! empty($params['price'])) {

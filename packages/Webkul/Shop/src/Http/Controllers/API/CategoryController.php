@@ -9,6 +9,7 @@ use Webkul\Product\Repositories\ProductRepository;
 use Webkul\Shop\Http\Resources\AttributeResource;
 use Webkul\Shop\Http\Resources\CategoryResource;
 use Webkul\Shop\Http\Resources\CategoryTreeResource;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends APIController
 {
@@ -57,19 +58,65 @@ class CategoryController extends APIController
      */
     public function getAttributes(): JsonResource
     {
+        $filters = [];
+
+        $categories = $this->categoryRepository->getModel()
+            ->where('id', '!=', 1)
+            ->get();
+
+        $filters[] = [
+            'code'    => 'category_id',
+            'name'    => 'All Categories',
+            'type'    => 'custom',
+            'options' => $categories->map(function ($category) {
+                return [
+                    'id'   => $category->id,
+                    'name' => $category->name,
+                ];
+            })->values(),
+        ];
+
+        $subtitles = DB::table('product_attribute_values as pav')
+            ->join('attributes as a', 'a.id', '=', 'pav.attribute_id')
+            ->where('a.code', 'custom_product_subtitle')
+            ->whereNotNull('pav.text_value')
+            ->distinct()
+            ->pluck('pav.text_value')
+            ->filter()
+            ->values();
+
+        if ($subtitles->isNotEmpty()) {
+            $filters[] = [
+                'code'    => 'custom_product_subtitle',
+                'name'    => 'Sizes',
+                'type'    => 'custom',
+                'options' => $subtitles->map(fn($value) => ['id' => $value, 'name' => $value]),
+            ];
+        }
+
+        $filters[] = [
+            'code'    => 'offer_title',
+            'name'    => 'Offer',
+            'type'    => 'custom',
+            'options' => collect([
+                ['id' => 'pmp',        'name' => 'PMP'],
+                ['id' => 'promotion',  'name' => 'PROMOTION'],
+                ['id' => 'clearance',  'name' => 'CLEARANCE'],
+            ]),
+        ];
+
         if (! request('category_id')) {
             $filterableAttributes = $this->attributeRepository->getFilterableAttributes();
-
-            return AttributeResource::collection($filterableAttributes);
+        } else {
+            $category = $this->categoryRepository->findOrFail(request('category_id'));
+            $filterableAttributes = $category->filterableAttributes ?: $this->attributeRepository->getFilterableAttributes();
         }
 
-        $category = $this->categoryRepository->findOrFail(request('category_id'));
-
-        if (empty($filterableAttributes = $category->filterableAttributes)) {
-            $filterableAttributes = $this->attributeRepository->getFilterableAttributes();
+        foreach ($filterableAttributes as $attribute) {
+            $filters[] = (new \Webkul\Shop\Http\Resources\AttributeResource($attribute))->toArray(request());
         }
 
-        return AttributeResource::collection($filterableAttributes);
+        return new JsonResource($filters);
     }
 
     /**
