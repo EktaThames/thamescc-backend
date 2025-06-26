@@ -27,6 +27,29 @@ class ConfigurableOption
      * @param  \Webkul\Product\Contracts\Product  $product
      * @return array
      */
+
+    /**
+     * Get product names for configurable variations.
+     *
+     * @param  \Webkul\Product\Contracts\Product  $product
+     * @return array
+     */
+    protected function getVariantNames($product)
+    {
+        $names = [];
+
+        foreach ($this->getAllowedVariants($product) as $variant) {
+            if (! empty($variant->custom_product_subtitle)) {
+                $names[$variant->id] = $variant->custom_product_subtitle;
+            } else {
+                $subtitle = optional($variant->attribute_values->firstWhere('attribute.code', 'custom_product_subtitle'))->text_value;
+                $names[$variant->id] = $subtitle ?: 'N/A';
+            }
+        }
+
+        return $names;
+    }
+
     public function getAllowedVariants($product)
     {
         if (count($this->allowedVariants)) {
@@ -69,6 +92,7 @@ class ConfigurableOption
             'variant_prices' => $this->getVariantPrices($product),
             'variant_images' => $this->getVariantImages($product),
             'variant_videos' => $this->getVariantVideos($product),
+            'variant_names'  => $this->getVariantNames($product), 
         ];
 
         return array_merge($config, $product->getTypeInstance()->getProductPrices());
@@ -184,12 +208,22 @@ class ConfigurableOption
         $prices = [];
 
         foreach ($this->getAllowedVariants($product) as $variant) {
-            $prices[$variant->id] = $variant->getTypeInstance()->getProductPrices();
+            $variantPrices = $variant->getTypeInstance()->getProductPrices();
+
+            $basePrice = $variantPrices['final']['price'] ?? $variantPrices['regular']['price'] ?? 0;
+
+            $packQuantity = (float) ($variant->pack_quantity ?? 1);
+
+            $unitPrice = $packQuantity > 0 ? round($basePrice / $packQuantity, 2) : 0;
+
+            $variantPrices['unit_price'] = $unitPrice;
+            $variantPrices['formatted_unit_price'] = core()->currency($unitPrice);
+
+            $prices[$variant->id] = $variantPrices;
         }
 
         return $prices;
     }
-
     /**
      * Get product images for configurable variations.
      *

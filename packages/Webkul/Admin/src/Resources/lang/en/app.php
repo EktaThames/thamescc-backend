@@ -1754,6 +1754,57 @@ return [
             ],
 
             'view' => [
+                'additional-information' => 'Additional Information',
+                'business-details' => 'Business Details',
+'trading-address'  => 'Trading Address',
+'registered-address' => 'Registered Address',
+'owner-details'    => 'Owner Details',
+'other-info'       => 'Other Information',
+
+// Business Details
+'business_trading_name'     => 'Business Trading Name',
+'type_of_business'          => 'Type of Business',
+'entity'                    => 'Entity',
+
+// Trading Address
+'trading_street'            => 'Trading Street',
+'trading_address_line_2'    => 'Trading Address Line 2',
+'trading_city'              => 'Trading City',
+'trading_postal_code'       => 'Trading Postal Code',
+'trading_country'           => 'Trading Country',
+'trading_phone'             => 'Trading Phone',
+'trading_email'             => 'Trading Email',
+
+// Owner Details
+'owner_first_name'          => 'Owner First Name',
+'owner_last_name'           => 'Owner Last Name',
+'owner_street'              => 'Owner Street',
+'owner_address_line_2'      => 'Owner Address Line 2',
+'owner_city'                => 'Owner City',
+'owner_postal_code'         => 'Owner Postal Code',
+'owner_country'             => 'Owner Country',
+'owner_phone'               => 'Owner Phone',
+'owner_email'               => 'Owner Email',
+
+// Registered Address
+'registered_street'         => 'Registered Street',
+'registered_apartment'      => 'Registered Apartment',
+'registered_city'           => 'Registered City',
+'registered_postal'         => 'Registered Postal',
+'registered_country'        => 'Registered Country',
+
+// Other Information
+'vat_number'                => 'VAT Number',
+'not_vat_registered'        => 'Not VAT Registered',
+'eoid'                      => 'EOID',
+'fid'                       => 'FID',
+'company_registration_number' => 'Company Registration Number',
+'referred_by'               => 'Referred By',
+'id_address_proof'          => 'ID / Address Proof',
+'accept_terms'              => 'Accepted Terms',
+'accept_processing'         => 'Accepted Data Processing',
+'accept_marketing'          => 'Accepted Marketing',
+
                 'account-delete-confirmation' => 'Are you sure you want to delete this account?',
                 'active'                      => 'Active',
                 'address-delete-confirmation' => 'Are you sure you want to delete this address?',

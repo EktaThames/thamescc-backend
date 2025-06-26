@@ -141,29 +141,31 @@
             <div class="mt-3.5 flex gap-2.5 max-xl:flex-wrap">
                 <!-- Left Component -->
                 <div class="flex flex-1 flex-col gap-2 max-xl:flex-auto">
+                    
                     {!! view_render_event('bagisto.admin.customers.customers.view.card.orders.before') !!}
-
+                    
                     @include('admin::customers.customers.view.orders')
-
+                    
                     {!! view_render_event('bagisto.admin.customers.customers.view.card.orders.after') !!}
-
+                    
                     {!! view_render_event('bagisto.admin.customers.customers.view.card.invoices.before') !!}
-
+                    
                     @include('admin::customers.customers.view.invoices')
-
+                    
                     {!! view_render_event('bagisto.admin.customers.customers.view.card.invoices.after') !!}
-
+                    
                     {!! view_render_event('bagisto.admin.customers.customers.view.card.reviews.before') !!}
-
+                    
                     @include('admin::customers.customers.view.reviews')
-
+                    
                     {!! view_render_event('bagisto.admin.customers.customers.view.card.reviews.after') !!}
+                    @include('admin::customers.customers.view.custom-fields')
 
-                    {!! view_render_event('bagisto.admin.customers.customers.view.card.notes.before') !!}
+                    <!-- {!! view_render_event('bagisto.admin.customers.customers.view.card.notes.before') !!} -->
 
-                    @include('admin::customers.customers.view.notes')
+                    <!-- @include('admin::customers.customers.view.notes')
 
-                    {!! view_render_event('bagisto.admin.customers.customers.view.card.notes.after') !!}
+                    {!! view_render_event('bagisto.admin.customers.customers.view.card.notes.after') !!} -->
                 </div>
 
                 <!-- Right Component -->

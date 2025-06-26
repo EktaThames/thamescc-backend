@@ -11,11 +11,13 @@ use Webkul\Admin\Http\Controllers\Catalog\Product\GroupedController;
 use Webkul\Admin\Http\Controllers\Catalog\Product\SimpleController;
 use Webkul\Admin\Http\Controllers\Catalog\Product\VirtualController;
 use Webkul\Admin\Http\Controllers\Catalog\ProductController;
-
+use Webkul\Admin\Http\Controllers\Catalog\ProductImportController;
 /**
  * Catalog routes.
  */
 Route::prefix('catalog')->group(function () {
+    Route::get('products/import', [ProductImportController::class, 'showImportForm'])->name('admin.catalog.products.import');
+    Route::post('products/import', [ProductImportController::class, 'import'])->name('admin.catalog.products.import.store');
     /**
      * Attributes routes.
      */
@@ -137,5 +139,6 @@ Route::prefix('catalog')->group(function () {
         Route::get('search', 'search')->name('admin.catalog.products.search');
 
         Route::get('{id}/{attribute_id}', 'download')->name('admin.catalog.products.file.download');
+
     });
 });
