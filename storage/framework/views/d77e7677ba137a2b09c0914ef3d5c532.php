@@ -1,0 +1,1 @@
+<?php /**PATH /var/www/html/Thames/thamescc-backend/packages/Webkul/Shop/src/Providers/../Resources/views/products/prices/configurable.blade.php ENDPATH**/ ?>
