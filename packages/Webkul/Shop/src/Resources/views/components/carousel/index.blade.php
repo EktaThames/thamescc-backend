@@ -19,6 +19,7 @@
             >
                 <div
                     class="max-h-screen w-screen bg-cover bg-no-repeat"
+                    style="background-color: #ff6925cf;"
                     v-for="(image, index) in images"
                     @click="visitLink(image)"
                     ref="slide"
