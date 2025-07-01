@@ -5163,3 +5163,23 @@
 #15 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #16 {main}
 "} 
+[2025-07-01 12:10:11] local.ERROR: Konekt\Concord\Proxies\ModelProxy::targetClass(): Return value must be of type string, null returned {"exception":"[object] (TypeError(code: 0): Konekt\\Concord\\Proxies\\ModelProxy::targetClass(): Return value must be of type string, null returned at C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\konekt\\concord\\src\\Proxies\\ModelProxy.php:70)
+[stacktrace]
+#0 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\konekt\\concord\\src\\Proxies\\BaseProxy.php(75): Konekt\\Concord\\Proxies\\ModelProxy->targetClass()
+#1 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\packages\\Webkul\\Category\\src\\Providers\\CategoryServiceProvider.php(18): Konekt\\Concord\\Proxies\\BaseProxy::__callStatic('observe', Array)
+#2 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Webkul\\Category\\Providers\\CategoryServiceProvider->boot()
+#3 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(43): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#4 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(95): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#5 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#6 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(696): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#7 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1151): Illuminate\\Container\\Container->call(Array)
+#8 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1132): Illuminate\\Foundation\\Application->bootProvider(Object(Webkul\\Category\\Providers\\CategoryServiceProvider))
+#9 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}(Object(Webkul\\Category\\Providers\\CategoryServiceProvider), 'Webkul\\\\Category...')
+#10 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1131): array_walk(Array, Object(Closure))
+#11 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
+#12 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(342): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#13 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(474): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#14 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#15 C:\\xampp\\htdocs\\thamescc-backend\\bagisto\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#16 {main}
+"} 
