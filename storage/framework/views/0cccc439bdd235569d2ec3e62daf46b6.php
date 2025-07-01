@@ -34,7 +34,7 @@ unset($__defined_vars); ?>
     </div>
 </v-carousel>
 
-<?php if (! $__env->hasRenderedOnce('9ff1cb26-9638-451f-9fb8-32939d134db2')): $__env->markAsRenderedOnce('9ff1cb26-9638-451f-9fb8-32939d134db2');
+<?php if (! $__env->hasRenderedOnce('937c4ea1-2e80-438c-a690-8963cb0d906f')): $__env->markAsRenderedOnce('937c4ea1-2e80-438c-a690-8963cb0d906f');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
@@ -48,6 +48,7 @@ $__env->startPush('scripts'); ?>
             >
                 <div
                     class="max-h-screen w-screen bg-cover bg-no-repeat"
+                    style="background-color: #ff6925cf;"
                     v-for="(image, index) in images"
                     @click="visitLink(image)"
                     ref="slide"
