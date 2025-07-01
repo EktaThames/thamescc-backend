@@ -1,0 +1,1 @@
+<?php /**PATH C:\xampp\htdocs\backendbagisto\thamescc-backend\packages\Webkul\Shop\src/resources/views/products/prices/configurable.blade.php ENDPATH**/ ?>
