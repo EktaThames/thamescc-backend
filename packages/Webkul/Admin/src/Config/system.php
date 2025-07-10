@@ -575,10 +575,6 @@ return [
             ],
         ],
     ],
-
-    /**
-     * Catalog.
-     */
     [
         'key'  => 'catalog',
         'name' => 'admin::app.configuration.index.catalog.title',

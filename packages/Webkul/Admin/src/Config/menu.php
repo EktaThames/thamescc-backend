@@ -360,4 +360,11 @@ return [
         'sort'       => 9,
         'icon'       => 'icon-configuration',
     ],
+    [
+        'key'        => 'footer-settings',
+        'name'       => 'admin::app.footer-settings.edit.title',
+        'route'      => 'admin.footer-settings.edit',
+        'sort'       => 100,
+        'icon'       => 'icon-cms',
+    ],
 ];
