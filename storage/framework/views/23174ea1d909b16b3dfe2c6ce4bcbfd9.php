@@ -7,7 +7,7 @@
     ></span>
 </v-mini-cart>
 
-<?php if (! $__env->hasRenderedOnce('e38b3d4b-6a00-4389-a71d-1177edd8574e')): $__env->markAsRenderedOnce('e38b3d4b-6a00-4389-a71d-1177edd8574e');
+<?php if (! $__env->hasRenderedOnce('7f3269bc-ea72-4abf-9a68-29ec623fb1b3')): $__env->markAsRenderedOnce('7f3269bc-ea72-4abf-9a68-29ec623fb1b3');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
@@ -375,7 +375,8 @@ $__env->startPush('scripts'); ?>
 
                         <a
                             href="<?php echo e(route('shop.checkout.onepage.index')); ?>"
-                            class="mx-auto block w-full cursor-pointer rounded-2xl bg-navyBlue px-11 py-4 text-center text-base font-medium text-white max-md:rounded-lg max-md:px-5 max-md:py-2"
+                            class="mx-auto block w-full cursor-pointer rounded-2xl bg-navyBlue px-11 py-4 text-center text-base font-medium text-white max-md:rounded-lg max-md:px-5 max-md:py-2" 
+                            style="background-color: #ff6c2a !important; border: none !important; color: #fff !important;"
                         >
                             <?php echo app('translator')->get('shop::app.checkout.cart.mini-cart.continue-to-checkout'); ?>
                         </a>
