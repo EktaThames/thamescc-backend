@@ -108,6 +108,18 @@ unset($__defined_vars); ?>
         <style>
             <?php echo core()->getConfigData('general.content.custom_scripts.custom_css'); ?>
 
+            button.secondary-button,
+            .secondary-button {
+                background-color: #ff6c2a !important;
+                border: none !important;
+                color: #fff !important;
+            }
+            button.primary-button,
+            .primary-button {
+                background-color: #ff6c2a !important;
+                border: 1px solid #ff6c2a !important;
+                color: #fff !important;
+            }
         </style>
 
         <?php echo view_render_event('bagisto.shop.layout.head.after'); ?>
