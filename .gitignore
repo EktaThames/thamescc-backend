@@ -32,3 +32,4 @@ yarn-error.log
 /playwright-report
 /storage/framework/cache/
 /storage/debugbar/
+/storage/framework/cache/data
