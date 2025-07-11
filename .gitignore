@@ -30,6 +30,7 @@ yarn.lock
 yarn-error.log
 /test-results
 /playwright-report
-/storage/framework/cache/
+/storage/framework/cache/*
 /storage/debugbar/
-/storage/framework/cache/data
+/storage/framework/views/
+/storage/logs/
