@@ -12,7 +12,7 @@
 ?>
 
 <footer style="background:#232221; color:#fff; padding:40px 0 0 0; font-family:inherit;">
-    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; max-width:1750px; margin:0 auto; gap:40px;">
+    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; max-width: 100%; margin:0 auto; gap:40px;padding: 0 60px;">
         <div style="flex:1; min-width:220px;">
             <a
                 href="<?php echo e(route('shop.home.index')); ?>"
@@ -108,7 +108,7 @@
             </div>
         </div>
     </div>
-    <div style="border-top:1px solid #444; margin-top:30px; padding:15px 0 10px 0; max-width:1750px; margin-left:auto; margin-right:auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+    <div style="border-top:1px solid #444; margin-top:30px; padding:15px 0 10px 0; max-width: 100%; padding: 0 60px;margin-left:auto; margin-right:auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;">
         <div>
             <a href="/privacy-policy" style="color:#fff;">Privacy & Policy</a>
         </div>
