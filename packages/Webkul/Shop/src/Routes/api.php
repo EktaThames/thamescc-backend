@@ -12,6 +12,8 @@ use Webkul\Shop\Http\Controllers\API\ProductController;
 use Webkul\Shop\Http\Controllers\API\ReviewController;
 use Webkul\Shop\Http\Controllers\API\WishlistController;
 
+//
+
 Route::group(['prefix' => 'api','middleware' => 'api'], function () {
     Route::controller(CoreController::class)->prefix('core')->group(function () {
         Route::get('countries', 'getCountries')->name('shop.api.core.countries');
