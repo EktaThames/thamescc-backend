@@ -23,7 +23,7 @@
 <?php endif; ?>
 </v-dashboard-total-visitors>
 
-<?php if (! $__env->hasRenderedOnce('6f36ddbb-70bf-4a10-88c6-330608f8276e')): $__env->markAsRenderedOnce('6f36ddbb-70bf-4a10-88c6-330608f8276e');
+<?php if (! $__env->hasRenderedOnce('caaf38cb-9f84-4bdd-a6ca-7098570d8bb5')): $__env->markAsRenderedOnce('caaf38cb-9f84-4bdd-a6ca-7098570d8bb5');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

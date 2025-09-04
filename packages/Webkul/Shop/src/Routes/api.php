@@ -11,10 +11,13 @@ use Webkul\Shop\Http\Controllers\API\OnepageController;
 use Webkul\Shop\Http\Controllers\API\ProductController;
 use Webkul\Shop\Http\Controllers\API\ReviewController;
 use Webkul\Shop\Http\Controllers\API\WishlistController;
+use Webkul\Shop\Http\Controllers\API\OffersController;
 
-//
+Route::group(['prefix' => 'api'], function () {
 
-Route::group(['prefix' => 'api','middleware' => 'api'], function () {
+Route::get('/offers', [OffersController::class, 'getOffers'])
+    ->name('shop.api.offers.index');
+
     Route::controller(CoreController::class)->prefix('core')->group(function () {
         Route::get('countries', 'getCountries')->name('shop.api.core.countries');
 

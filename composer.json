@@ -20,7 +20,7 @@
         "astrotomic/laravel-translatable": "^11.0.0",
         "bagisto/image-cache": "dev-master",
         "bagisto/rest-api": "dev-master",
-        "barryvdh/laravel-dompdf": "^2.0.0",
+        "barryvdh/laravel-dompdf": "^2.2",
         "darkaonline/l5-swagger": "^8.6",
         "diglactic/laravel-breadcrumbs": "^9.0",
         "elasticsearch/elasticsearch": "^8.10",

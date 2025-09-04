@@ -47,6 +47,7 @@ class ProductImportController extends Controller
                     'weight'             => $record['Product pack 1 weight'] ?? 1,
                     'status'             => 1,
                     'qty'                => $record['qty_in_stock'] ?? 0,
+                    'priority'           => $record['priority'] ?? null,
                 ];
 
                 if ($product) {

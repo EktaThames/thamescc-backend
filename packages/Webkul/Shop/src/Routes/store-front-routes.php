@@ -9,6 +9,13 @@ use Webkul\Shop\Http\Controllers\ProductController;
 use Webkul\Shop\Http\Controllers\ProductsCategoriesProxyController;
 use Webkul\Shop\Http\Controllers\SearchController;
 use Webkul\Shop\Http\Controllers\SubscriptionController;
+use Webkul\Shop\Http\Controllers\OffersController;
+
+
+// Offer route.
+Route::get('/offers',[OffersController::class, 'index'])->name('shop.offers.index');
+Route::get('/offers/pdf', [OffersController::class, 'downloadPdf'])->name('shop.offers.pdf');
+
 
 /**
  * CMS pages.
