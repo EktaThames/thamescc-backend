@@ -237,7 +237,7 @@ unset($__defined_vars); ?>
 
 
             <!-- Page Content Blade Component -->
-            <main id="main" class="bg-white">
+            <main id="main" class="bg-white" style="padding: 10px !important;">
                 <?php echo e($slot); ?>
 
             </main>

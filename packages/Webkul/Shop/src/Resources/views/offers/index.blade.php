@@ -18,6 +18,46 @@
 
     <!-- Offers Listing -->
     <v-offers :initial-products='@json($initialProducts)'></v-offers>
+   @push('styles')
+<style>
+     
+    /* Hide hover overlay by default */
+    .product-card .absolute {
+        position: absolute !important;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.0) !important; /* transparent */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    /* Show only on hover */
+    .product-card:hover .absolute {
+        opacity: 1;
+    }
+
+    /* Ensure overlay stays inside image wrapper only */
+    .product-card .image-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+     /* Remove the heart/wishlist icon inside the product image */
+    .product-card .product-actions,
+    .product-card .wishlist-btn,
+    .product-card .compare-btn,
+    .product-card button[title="Add to Wishlist"],
+    .product-card button[aria-label*="wishlist"],
+    .product-card button[aria-label*="compare"] {
+        display: none !important;
+    }
+</style>
+@endpush
+
+
+
+
 
     @pushOnce('scripts')
         <script type="text/x-template" id="v-offers-template">
@@ -80,12 +120,21 @@
                         <template v-else>
                             <template v-if="products.length">
                                 <div class="mt-8 grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:mt-5 max-md:justify-items-center max-md:gap-x-4 max-md:gap-y-5">
-                                    <x-shop::products.card
-                                        ::mode="'grid'"
-                                        v-for="product in products"
-                                        :navigation-link="route('shop.search.index')"
-                                    />
-                                </div>
+   <div v-for="product in products" :key="product.id" class="product-card relative group overflow-hidden rounded-2xl">
+    
+    <div class="image-wrapper relative">
+        <x-shop::products.card
+            ::mode="'grid'"
+            :navigation-link="route('shop.search.index')"
+        />
+    </div>
+
+</div>
+
+</div>
+
+
+
                             </template>
 
                             <!-- Empty Products Container -->
@@ -235,5 +284,6 @@
                 },
             });
         </script>
+        
     @endPushOnce
 </x-shop::layouts>
