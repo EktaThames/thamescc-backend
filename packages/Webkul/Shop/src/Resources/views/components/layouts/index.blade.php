@@ -124,7 +124,7 @@
             {!! view_render_event('bagisto.shop.layout.content.before') !!}
 
             <!-- Page Content Blade Component -->
-            <main id="main" class="bg-white">
+            <main id="main" class="bg-white" style="padding: 10px !important;">
                 {{ $slot }}
             </main>
 

@@ -37,7 +37,7 @@
                     <div class="offer-label">{{ strtoupper($product->offer_title) }}</div>
                 @endif
                 @if (!empty($product->short_description))
-                    <div class="product-desc">{{ Str::limit($product->short_description, 100) }}</div>
+                    <div class="product-desc">{{ Str::limit(strip_tags($product->short_description), 100) }}</div>
                 @endif
             </td>
         </tr>
