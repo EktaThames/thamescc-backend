@@ -22,14 +22,13 @@
 
         .product-grid {
             width: 100%;
-            border-spacing: 20px;
+            border-spacing: 16px;
         }
 
         .product-card {
             background: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            overflow: hidden;
             border: 1px solid #eee;
             padding: 12px;
             vertical-align: top;
@@ -89,15 +88,17 @@
     <h1>Special Offers</h1>
 
     <table class="product-grid">
-        <tr>
-            @foreach ($products as $index => $product)
-                <td class="product-card">
-                    @php
-                        $img = $product->base_image['small_image_url'] ?? '';
-                    @endphp
-                    @if ($img)
-                        <img src="{{ $img }}" class="product-image" />
-                    @endif
+    <tr>
+    @foreach ($products as $index => $product)
+        <td class="product-card">
+           @php
+    $imageData = product_image()->getProductBaseImage($product);
+    $finalImg = $imageData['original_image_url'] ?? bagisto_asset('images/small-product-placeholder.webp');
+@endphp
+
+@if ($finalImg)
+    <img src="{{ $finalImg }}" class="product-image" />
+@endif
 
                     <div class="product-name">{{ $product->name }}</div>
                     <div class="product-price">Price: {{ core()->currency($product->price) }}</div>
@@ -124,6 +125,7 @@
                     </tr><tr>
                 @endif
             @endforeach
+            
         </tr>
     </table>
 </body>
