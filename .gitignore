@@ -34,3 +34,5 @@ yarn-error.log
 /storage/debugbar/
 /storage/framework/views/
 /storage/logs/
+/storage/app/public/product/
+/storage/app/private/imports/images/
