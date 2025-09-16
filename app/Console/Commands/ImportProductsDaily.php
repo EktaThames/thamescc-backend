@@ -201,7 +201,7 @@ class ImportProductsDaily extends Command
                     if (!$imgPath) continue;
 
                     $sourceImagePath = storage_path('app/private/imports/images/' . ltrim($imgPath, '/'));
-                    $destinationPath = storage_path('app/public/product/');
+                    $destinationPath = storage_path('app/public/catalog/products/');
 
                     if (!File::exists($sourceImagePath)) continue;
                     if (!File::exists($destinationPath)) File::makeDirectory($destinationPath, 0755, true);
@@ -213,13 +213,13 @@ class ImportProductsDaily extends Command
                     Log::info("Copied image for SKU {$sku}: {$destinationFileName}");
 
                     $exists = ProductImage::where('product_id', $product->id)
-                        ->where('path', 'product/' . $destinationFileName)
+                        ->where('path', 'catalog/products/' . $destinationFileName)
                         ->exists();
 
                     if (!$exists) {
                         ProductImage::create([
                             'product_id' => $product->id,
-                            'path' => 'product/' . $destinationFileName,
+                            'path' => 'catalog/products/' . $destinationFileName,
                             'type' => 'image',
                             'sort_order' => 0,
                         ]);
