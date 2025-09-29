@@ -43,6 +43,7 @@ class OffersController extends Controller
                 'description' => $flat->description,
                 'url_key'     => $flat->url_key,
                 'base_image'  => $baseImage,
+                'base_image'  => $baseImage, // This line was correct, the error was likely a typo in a previous version.
                 'images'      => product_image()->getGalleryImages($product),
                 'is_new'      => (bool) $flat->new,
                 'is_featured' => (bool) $flat->featured,
@@ -51,6 +52,7 @@ class OffersController extends Controller
                 'is_wishlist' => (bool) auth()->guard()->user()?->wishlist_items
                     ->where('channel_id', core()->getCurrentChannel()->id)
                     ->where('product_id', $flat->id)
+                    ->where('product_id', $product?->id ?? $flat->id)
                     ->count(),
                 'min_price'   => core()->formatPrice($productTypeInstance->getMinimalPrice()),
                 'prices'      => $productTypeInstance->getProductPrices(),
