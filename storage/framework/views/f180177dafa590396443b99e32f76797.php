@@ -5,7 +5,7 @@
 >
 </v-product-card>
 
-<?php if (! $__env->hasRenderedOnce('eab006da-4b9d-4053-a998-a504a594b1dd')): $__env->markAsRenderedOnce('eab006da-4b9d-4053-a998-a504a594b1dd');
+<?php if (! $__env->hasRenderedOnce('46ceb5c3-5b51-4bf2-b262-16d1e5f196a7')): $__env->markAsRenderedOnce('46ceb5c3-5b51-4bf2-b262-16d1e5f196a7');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

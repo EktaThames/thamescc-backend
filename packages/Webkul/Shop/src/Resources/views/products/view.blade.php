@@ -319,6 +319,44 @@
                                     @endif
                                 </div>
 
+                               
+
+                                <!-- SKU and Categories -->
+        <div class="mt-4 flex flex-col gap-2 text-sm text-gray-700">
+    {{-- SKU --}}
+    <div class="flex items-center gap-2">
+        <span class="font-medium text-gray-900">SKU:</span>
+        <span class="px-2 py-0.5 rounded bg-gray-100 text-gray-800 text-xs">
+            {{ $product->sku }}
+        </span>
+    </div>
+
+    {{-- Categories --}}
+    @if ($product->categories->count())
+        <div class="flex items-center gap-2">
+            <span class="font-medium text-gray-900">
+                {{ $product->categories->count() > 1 ? 'Categories:' : 'Category:' }}
+            </span>
+            <div class="flex flex-wrap gap-2">
+                @foreach ($product->categories as $category)
+                    <a href="{{ route('shop.product_or_category.index', $category->slug) }}"
+                       class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100 transition">
+                        {{ $category->name }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+
+
+    {{-- Pack Size --}}
+    @if ($product->pack_quantity)
+        <p class="text-sm text-gray-600">
+            Pack Size: {{ $product->pack_quantity }}
+        </p>
+    @endif
+</div>
                                 {!! view_render_event('bagisto.shop.products.name.after', ['product' => $product]) !!}
 
                                 <!-- Rating -->

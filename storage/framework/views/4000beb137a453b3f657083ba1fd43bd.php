@@ -25,7 +25,7 @@
 <?php endif; ?>
 </v-products-carousel>
 
-<?php if (! $__env->hasRenderedOnce('d2240517-8056-4e04-9ea4-30a83942301e')): $__env->markAsRenderedOnce('d2240517-8056-4e04-9ea4-30a83942301e');
+<?php if (! $__env->hasRenderedOnce('1540d88e-637a-47de-b747-269df73cbf49')): $__env->markAsRenderedOnce('1540d88e-637a-47de-b747-269df73cbf49');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
