@@ -60,21 +60,23 @@ class CategoryController extends APIController
     {
         $filters = [];
 
-        $categories = $this->categoryRepository->getModel()
-            ->where('id', '!=', 1)
-            ->get();
+        if (request()->has('category_id')) {
+            $category = $this->categoryRepository->findOrFail(request('category_id'));
 
-        $filters[] = [
-            'code'    => 'category_id',
-            'name'    => 'All Categories',
-            'type'    => 'custom',
-            'options' => $categories->map(function ($category) {
-                return [
-                    'id'   => $category->id,
-                    'name' => $category->name,
+            if ($category->children->isNotEmpty()) {
+                $filters[] = [
+                    'code'    => 'category_id',
+                    'name'    => 'Sub Categories',
+                    'type'    => 'custom',
+                    'options' => $category->children->map(function ($child) {
+                        return [
+                            'id'   => $child->id,
+                            'name' => $child->name,
+                        ];
+                    })->values(),
                 ];
-            })->values(),
-        ];
+            }
+        }
 
         $subtitles = DB::table('product_attribute_values as pav')
             ->join('attributes as a', 'a.id', '=', 'pav.attribute_id')
