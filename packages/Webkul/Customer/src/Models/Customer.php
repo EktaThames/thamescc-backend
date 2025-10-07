@@ -48,6 +48,8 @@ class Customer extends Authenticatable implements CustomerContract
         'first_name',
         'last_name',
         'gender',
+        'is_trade',
+        'is_approved',
         'date_of_birth',
         'email',
         'phone',

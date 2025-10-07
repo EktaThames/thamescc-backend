@@ -1991,6 +1991,17 @@ return [
             'update-success' => 'Customer Updated Successfully',
         ],
 
+        'trade-approvals' => [
+            'title' => 'Trade Approvals',
+            'approve' => 'Approve',
+            'reject' => 'Reject',
+            'rejected' => 'Rejected',
+            'approve-success' => 'Trade customer approved successfully.',
+            'approve-failed' => 'Failed to approve trade customer.',
+            'reject-success' => 'Trade customer rejected successfully.',
+            'reject-failed' => 'Failed to reject trade customer.',
+        ],
+
         'groups' => [
             'index' => [
                 'title' => 'Groups',
