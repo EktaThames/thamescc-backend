@@ -91,14 +91,52 @@ class OffersController extends Controller
     }
 
     private function getOfferProducts()
-    {
-        return ProductFlat::with(['product', 'product.images', 'product.reviews'])
-            ->whereNotNull('priority')
-            ->where('status', 1)
-            ->where('visible_individually', 1)
-            ->where('channel', core()->getCurrentChannelCode())
-            ->where('locale', app()->getLocale())
-            ->orderBy('priority')
-            ->get(); // no pagination for PDF
+{
+    $products = ProductFlat::with(['product', 'product.images'])
+        ->select([
+            'id',
+            'sku',
+            'name',
+            'price',
+            'por_percentage',
+            'rrp_price',
+            'custom_product_subtitle',
+            'product_id',
+        ])
+        ->whereNotNull('priority')
+        ->where('status', 1)
+        ->where('visible_individually', 1)
+        ->where('channel', core()->getCurrentChannelCode())
+        ->where('locale', app()->getLocale())
+        ->orderBy('priority')
+        ->get();
+
+    foreach ($products as $product) {
+        // Get product base image record
+        $imageData = $product->product?->images?->first();
+
+        $imagePath = null;
+
+        if ($imageData && !empty($imageData->path)) {
+            $imagePath = \Illuminate\Support\Facades\Storage::disk('public')->path($imageData->path);
+        }
+
+        // If the primary image doesn't exist, use the local placeholder
+        if (! $imagePath || ! file_exists($imagePath)) {
+            $imagePath = public_path('vendor/webkul/ui/assets/images/product/large-product-placeholder.png');
+        }
+
+        // Encode the final image path (either product image or placeholder) to Base64
+        if (file_exists($imagePath)) {
+            $mimeType = mime_content_type($imagePath);
+            $base64 = base64_encode(file_get_contents($imagePath));
+            $product->base64_image = 'data:' . $mimeType . ';base64,' . $base64;
+        } else {
+            $product->base64_image = ''; // Should not happen if placeholder exists
+        }
     }
+
+    return $products;
+}
+
 }
