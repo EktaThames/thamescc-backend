@@ -9,10 +9,16 @@
                 {{ __('Special Offers') }}
             </h1>
 
-            <a href="{{ route('shop.offers.pdf') }}" target="_blank"
-                class="secondary-button block w-max rounded-2xl px-11 py-3 text-center text-base max-md:rounded-lg max-md:text-sm max-sm:px-7 max-sm:py-2">
-                <i class="icon download-icon"></i> {{ __('Download Offers as PDF') }}
-            </a>
+            @php
+    $customer = auth()->guard('customer')->user();
+@endphp
+
+@if($customer && $customer->customer_group_id == 3)
+    <a href="{{ route('shop.offers.pdf') }}" target="_blank"
+        class="secondary-button block w-max rounded-2xl px-11 py-3 text-center text-base max-md:rounded-lg max-md:text-sm max-sm:px-7 max-sm:py-2">
+        <i class="icon download-icon"></i> {{ __('Download Offers as PDF') }}
+    </a>
+@endif
         </div>
     </div>
 

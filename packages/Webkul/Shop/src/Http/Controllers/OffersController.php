@@ -82,13 +82,20 @@ class OffersController extends Controller
 
 
     public function downloadPdf()
-    {
-        $products = $this->getOfferProducts();
+{
+    $user = auth()->guard()->user();
 
-        $pdf = PDF::loadView('shop::offers.pdf', compact('products'));
-
-        return $pdf->download('special-offers.pdf');
+    // Restrict access to only wholesale customers
+    if (! $user || $user->customer_group_id != 3) {
+        abort(403, 'You are not authorized to download this file.');
     }
+
+    $products = $this->getOfferProducts();
+
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('shop::offers.pdf', compact('products'));
+
+    return $pdf->download('special-offers.pdf');
+}
 
     private function getOfferProducts()
 {
