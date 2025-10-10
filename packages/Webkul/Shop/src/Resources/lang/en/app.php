@@ -68,7 +68,7 @@ return [
             'success-pending-approval'    => 'Account created successfully. It is pending for approval by the admin.',
             'trade-customer'              => 'Trade Customer',
             'trade-customer-title'        => 'Trade Customer Registration',
-            'normal-customer'             => 'Normal Customer',
+            'normal-customer'             => 'General Customer',
             'verification-not-sent'       => 'Error! Problem in sending verification email, please try again later.',
             'verification-sent'           => 'Verification email sent',
             'verified'                    => 'Your account has been verified, try to login now.',
