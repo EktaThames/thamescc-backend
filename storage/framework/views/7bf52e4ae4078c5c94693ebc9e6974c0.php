@@ -2,11 +2,6 @@
 
 
 <div class="flex min-h-[78px] w-full justify-between border border-b border-l-0 border-r-0 border-t-0 px-[60px] max-1180:px-8">
-    <!--
-        This section will provide categories for the first, second, and third levels. If
-        additional levels are required, users can customize them according to their needs.
-    -->
-    <!-- Left Nagivation Section -->
     <div class="flex items-center gap-x-10 max-[1180px]:gap-x-5">
         <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.before'); ?>
 
@@ -52,13 +47,11 @@
 
     </div>
 
-    <!-- Right Nagivation Section -->
     <div class="flex items-center gap-x-9 max-[1100px]:gap-x-6 max-lg:gap-x-8">
 
         <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.search_bar.before'); ?>
 
 
-        <!-- Search Bar Container -->
         <div class="relative w-full">
             <form
                 action="<?php echo e(route('shop.search.index')); ?>"
@@ -104,13 +97,11 @@
         <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.search_bar.after'); ?>
 
 
-        <!-- Right Navigation Links -->
         <div class="mt-1.5 flex gap-x-8 max-[1100px]:gap-x-6 max-lg:gap-x-8">
 
             <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.compare.before'); ?>
 
 
-            <!-- Compare -->
             <?php if(core()->getConfigData('catalog.products.settings.compare_option')): ?>
                 <a
                     href="<?php echo e(route('shop.compare.index')); ?>"
@@ -129,7 +120,6 @@
             <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.mini_cart.before'); ?>
 
 
-            <!-- Mini cart -->
             <?php if(core()->getConfigData('sales.checkout.shopping_cart.cart_page')): ?>
                 <?php echo $__env->make('shop::checkout.cart.mini-cart', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             <?php endif; ?>
@@ -140,7 +130,6 @@
             <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile.before'); ?>
 
 
-            <!-- user profile -->
             <?php if (isset($component)) { $__componentOriginal6eb652d0a4a36e6466d8d4f363feb553 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal6eb652d0a4a36e6466d8d4f363feb553 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'shop::components.dropdown.index','data' => ['position' => 'bottom-'.e(core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left').'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -160,7 +149,6 @@
                     ></span>
                  <?php $__env->endSlot(); ?>
 
-                <!-- Guest Dropdown -->
                 <?php if(auth()->guard('customer')->guest()): ?>
                      <?php $__env->slot('content', null, []); ?> 
                         <div class="grid gap-2.5">
@@ -205,7 +193,6 @@
                      <?php $__env->endSlot(); ?>
                 <?php endif; ?>
 
-                <!-- Customers Dropdown -->
                 <?php if(auth()->guard('customer')->check()): ?>
                      <?php $__env->slot('content', null, ['class' => '!p-0']); ?> 
                         <div class="grid gap-2.5 p-5 pb-0">
@@ -249,7 +236,6 @@
                                 </a>
                             <?php endif; ?>
 
-                            <!--Customers logout-->
                             <?php if(auth()->guard('customer')->check()): ?>
                                 <?php if (isset($component)) { $__componentOriginal4d3fcee3e355fb6c8889181b04f357cc = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal4d3fcee3e355fb6c8889181b04f357cc = $attributes; } ?>
@@ -303,7 +289,7 @@
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('b29cd0f4-a075-4f22-a900-3f496a1fe02d')): $__env->markAsRenderedOnce('b29cd0f4-a075-4f22-a900-3f496a1fe02d');
+<?php if (! $__env->hasRenderedOnce('83239260-633f-4a3f-b526-cacbf6f694a5')): $__env->markAsRenderedOnce('83239260-633f-4a3f-b526-cacbf6f694a5');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
@@ -390,7 +376,6 @@ $__env->startPush('scripts'); ?>
             data() {
                 return  {
                     isLoading: true,
-
                     categories: [],
                 }
             },
@@ -401,16 +386,18 @@ $__env->startPush('scripts'); ?>
 
             methods: {
                 get() {
+                    // Fetching the categories (first level with nested children)
                     this.$axios.get("<?php echo e(route('shop.api.categories.tree')); ?>")
                         .then(response => {
                             this.isLoading = false;
-
                             this.categories = response.data.data;
                         }).catch(error => {
                             console.log(error);
                         });
                 },
 
+                // This method pairs the second-level categories for display in columns.
+                // It remains the same as its function is to structure the dropdown content.
                 pairCategoryChildren(category) {
                     return category.children.reduce((result, value, index, array) => {
                         if (index % 2 === 0) {
@@ -425,6 +412,4 @@ $__env->startPush('scripts'); ?>
     </script>
 <?php $__env->stopPush(); endif; ?>
 
-<?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.after'); ?>
-
-<?php /**PATH C:\xampp\htdocs\backendbagisto\thamescc-backend\packages\Webkul\Shop\src/resources/views/components/layouts/header/desktop/bottom.blade.php ENDPATH**/ ?>
+<?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.after'); ?><?php /**PATH C:\xampp\htdocs\backendbagisto\thamescc-backend\packages\Webkul\Shop\src/resources/views/components/layouts/header/desktop/bottom.blade.php ENDPATH**/ ?>

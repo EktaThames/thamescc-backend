@@ -1,11 +1,6 @@
 {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.before') !!}
 
 <div class="flex min-h-[78px] w-full justify-between border border-b border-l-0 border-r-0 border-t-0 px-[60px] max-1180:px-8">
-    <!--
-        This section will provide categories for the first, second, and third levels. If
-        additional levels are required, users can customize them according to their needs.
-    -->
-    <!-- Left Nagivation Section -->
     <div class="flex items-center gap-x-10 max-[1180px]:gap-x-5">
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.before') !!}
 
@@ -47,12 +42,10 @@
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.after') !!}
     </div>
 
-    <!-- Right Nagivation Section -->
     <div class="flex items-center gap-x-9 max-[1100px]:gap-x-6 max-lg:gap-x-8">
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.search_bar.before') !!}
 
-        <!-- Search Bar Container -->
         <div class="relative w-full">
             <form
                 action="{{ route('shop.search.index') }}"
@@ -97,12 +90,10 @@
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.search_bar.after') !!}
 
-        <!-- Right Navigation Links -->
         <div class="mt-1.5 flex gap-x-8 max-[1100px]:gap-x-6 max-lg:gap-x-8">
 
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.compare.before') !!}
 
-            <!-- Compare -->
             @if(core()->getConfigData('catalog.products.settings.compare_option'))
                 <a
                     href="{{ route('shop.compare.index') }}"
@@ -119,7 +110,6 @@
 
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.mini_cart.before') !!}
 
-            <!-- Mini cart -->
             @if(core()->getConfigData('sales.checkout.shopping_cart.cart_page'))
                 @include('shop::checkout.cart.mini-cart')
             @endif
@@ -128,7 +118,6 @@
 
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile.before') !!}
 
-            <!-- user profile -->
             <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
                 <x-slot:toggle>
                     <span
@@ -139,7 +128,6 @@
                     ></span>
                 </x-slot>
 
-                <!-- Guest Dropdown -->
                 @guest('customer')
                     <x-slot:content>
                         <div class="grid gap-2.5">
@@ -180,7 +168,6 @@
                     </x-slot>
                 @endguest
 
-                <!-- Customers Dropdown -->
                 @auth('customer')
                     <x-slot:content class="!p-0">
                         <div class="grid gap-2.5 p-5 pb-0">
@@ -222,7 +209,6 @@
                                 </a>
                             @endif
 
-                            <!--Customers logout-->
                             @auth('customer')
                                 <x-shop::form
                                     method="DELETE"
@@ -336,7 +322,6 @@
             data() {
                 return  {
                     isLoading: true,
-
                     categories: [],
                 }
             },
@@ -347,16 +332,18 @@
 
             methods: {
                 get() {
+                    // Fetching the categories (first level with nested children)
                     this.$axios.get("{{ route('shop.api.categories.tree') }}")
                         .then(response => {
                             this.isLoading = false;
-
                             this.categories = response.data.data;
                         }).catch(error => {
                             console.log(error);
                         });
                 },
 
+                // This method pairs the second-level categories for display in columns.
+                // It remains the same as its function is to structure the dropdown content.
                 pairCategoryChildren(category) {
                     return category.children.reduce((result, value, index, array) => {
                         if (index % 2 === 0) {
