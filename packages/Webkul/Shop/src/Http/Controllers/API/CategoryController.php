@@ -107,6 +107,10 @@ class CategoryController extends APIController
             ]),
         ];
 
+        if ($brandAttribute = $this->attributeRepository->findOneByField('code', 'brand')) {
+            $filters[] = (new \Webkul\Shop\Http\Resources\AttributeResource($brandAttribute))->toArray(request());
+        }
+
         if (! request('category_id')) {
             $filterableAttributes = $this->attributeRepository->getFilterableAttributes();
         } else {
@@ -114,7 +118,7 @@ class CategoryController extends APIController
             $filterableAttributes = $category->filterableAttributes ?: $this->attributeRepository->getFilterableAttributes();
         }
 
-        foreach ($filterableAttributes as $attribute) {
+        foreach ($filterableAttributes->where('code', '!=', 'brand') as $attribute) {
             $filters[] = (new \Webkul\Shop\Http\Resources\AttributeResource($attribute))->toArray(request());
         }
 
