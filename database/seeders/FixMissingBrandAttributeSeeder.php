@@ -43,6 +43,13 @@ class FixMissingBrandAttributeSeeder extends Seeder
         $productsUpdated = 0;
 
         foreach ($products as $product) {
+            // Add a check to ensure the product exists in the main products table before processing.
+            // This prevents errors from orphan variants or inconsistent data.
+            if (! DB::table('products')->where('id', $product->id)->exists()) {
+                $this->command->warn('Skipping non-existent product with ID: ' . $product->id);
+                continue;
+            }
+
             $attributeValueExists = DB::table('product_attribute_values')
                 ->where('product_id', $product->id)
                 ->where('attribute_id', $brandAttribute->id)
